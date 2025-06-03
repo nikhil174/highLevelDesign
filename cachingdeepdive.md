@@ -4,53 +4,49 @@
 - **Cache-Aside (Lazy Loading)**: Data is loaded into the cache only when requested.
 
   Pros:
-  - Simple
-  - Reduces cache pollution
-  - Only hot data cached
+  - increased fault tolerance
+  - flexible data models
 
   Cons:
-  - First read is slow (cache miss)
-  - Possible cache stampede
+  - stale data
 
 - **Read-Through**: Cache sits in front of the database and loads data automatically on cache miss.
 
   Pros:
-  - Transparent to application
-  - Consistent cache population
+  - no stale data
 
   Cons:
-  - More complex
-  - May add latency on miss
+  - cache Failure (all request goes through cache)
+  - less flexibility (db and cache should have same data)
 
 **Write Caching Strategies**
 - **Write-Aside (Lazy Write)**: Application writes data to the database and then invalidates or updates the cache.
 
   Pros:
-  - Simple
-  - Avoids stale cache
-  - No risk of data loss in cache
+  - faster writes
+  - cache independence (increased fault tolerance)
 
   Cons:
-  - Cache may be empty after write
-  - Extra logic needed in application
+  - slower reads
+  - stale data
 
 - **Write-Through**: Data is written to both cache and database at the same time.
 
   Pros:
-  - Data consistency
-  - Simple recovery
+  - no stale data
+  - faster reads
 
   Cons:
   - Slower writes
-  - Higher write amplification
+  - cache dependency
 
 - **Write-Back (Write-Behind)**: Data is written to cache first, then asynchronously to the database.
 
   Pros:
-  - Fast writes
-  - Reduces DB load
+  - Faster writes
+  - Faster reads
 
   Cons:
-  - Risk of data loss on cache failure
-  - Eventual consistency
+  - Risk of data loss 
+  - cache dependency
 
