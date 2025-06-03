@@ -15,10 +15,12 @@
         - Example: SELECT * FROM users WHERE age > 18;
         - Benefit: Strong consistency, ACID compliance, complex queries.
         - Shortcoming: Rigid schema, scaling can be challenging.
+        - When to use: Best for applications needing complex queries, transactions, and strong data integrity (e.g., banking, ERP systems).
     - **NoSQL**: Refers to non-relational databases, often optimized for specific data models and access patterns.
         - Example: Storing JSON documents in MongoDB.
         - Benefit: High scalability, flexible schema, handles big data and real-time web apps.
         - Shortcoming: Weaker consistency guarantees, limited complex queries.
+        - When to use: Ideal for large-scale, rapidly changing, or unstructured data (e.g., social media, IoT, analytics).
 
 **Object Storage**: A storage architecture that manages data as objects, rather than files or blocks.
     - Example: Amazon S3, Google Cloud Storage
