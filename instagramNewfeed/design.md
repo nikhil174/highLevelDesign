@@ -129,3 +129,30 @@
   - API gateway routes the request to the presigned URL generator service, which generates the URL and returns it to the client.
   - Client uploads the content directly to object storage; object storage returns the URL of the uploaded content to the client.
   - Client requests for the post feed to the API gateway with the {postId, userId, mediaUrl}. The following steps are similar to the create text post request
+
+- **Read the newsfeed**
+  
+  ![Read Newsfeed Flow](in5.png)
+  - Client requests the read post API; API gateway forwards the request to NewsFeed Reader (NFR) service.
+  - NFR fetches the pre-built news feed from feed cache and sends this newsfeed to the client.
+  - The newsfeed that the client receives contains the URL for the media, not the actual content.
+  - Client fetches the media from the CDN; if content is not present in CDN, then it pulls from the object storage.
+  - The text reaches first, and for media, the client has to reach out to the CDN.
+
+- **Comment on the post**
+  
+  ![Comment Flow](in6.png)
+  - Post request sent from client; API gateway routes it to the comment service
+  - Comment service processes this comment and stores it in comment DB
+  - After saving to comment DB, client receives the confirmation from the comment service
+  - Comment service pushes the event {userId, postId} in the message queue
+  - Notification service pulls this event and notifies the owner (can be a 3rd party service)
+
+- **Like a post**
+  
+  ![Like Flow](in7.png)
+  - Post request sent from client; API gateway routes it to the like service
+  - Like service processes this like and stores it in Like DB
+  - Like service updates the like cache as well. This cache contains the mapping between the post and their like count.
+  - Like service pushes the event {userId, postId} in the message queue
+  - Notification service pulls this event and notifies the owner (can be a 3rd party service)
