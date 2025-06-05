@@ -156,3 +156,23 @@
   - Like service updates the like cache as well. This cache contains the mapping between the post and their like count.
   - Like service pushes the event {userId, postId} in the message queue
   - Notification service pulls this event and notifies the owner (can be a 3rd party service)
+
+  #### Deep Dive Insights
+  - **Database Selection**
+    - **Posts DB**: Stores posts with no fixed structure (text, images, video—some posts may have one or more types, some may have none). **Scale:** ~50 million requests/day. **Query Pattern:** Simple (fetch by postId). **Recommended:** NoSQL DB (e.g., DynamoDB, Cassandra) for flexibility and scalability.
+    - **Feeds DB**: Maps userId to news feed (feeds depend on Post DB). **Scale:** ~50 million requests/day. **Query Pattern:** Simple (fetch feed by userId). **Recommended:** NoSQL DB for high write throughput and flexible schema.
+    - **Comments DB**: Handles nested comments with no fixed schema. **Scale:** ~1.5 billion requests/day. **Query Pattern:** Simple (fetch all comments for a post). **Recommended:** NoSQL DB for handling large volumes and flexible, hierarchical data.
+    - **Likes DB**: Data may evolve (e.g., new reactions). **Scale:** ~1.5 billion requests/day. **Query Pattern:** Simple (get like count, list users who liked a post). **Recommended:** NoSQL DB for scalability and schema evolution.
+    - **Follow DB**: Stores user relationships. **Recommended:** Graph DB (e.g., Neo4j) to efficiently model and traverse user relationships (users as nodes, follows as edges). **Benefit:** Efficiently finds followers/following lists, handles large relationship graphs.
+
+  **Summary Table:**
+
+  | Database    | Data Type         | Scale                | Query Pattern             | Recommended DB |
+  |-------------|------------------|----------------------|--------------------------|---------------|
+  | Posts DB    | Unstructured     | 50M req/day          | By postId                | NoSQL         |
+  | Feeds DB    | Unstructured     | 50M req/day          | By userId                | NoSQL         |
+  | Comments DB | Hierarchical     | 1.5B req/day         | By postId (fetch all)    | NoSQL         |
+  | Likes DB    | Evolving         | 1.5B req/day         | By postId/userId (count, list users) | NoSQL         |
+  | Follow DB   | Graph/Relational | High (many-to-many)  | By userId (traverse graph) | Graph DB      |
+
+  > **Tip:** Use NoSQL for flexible, high-scale, simple-access data. Use Graph DB for complex, highly-connected relationships.
