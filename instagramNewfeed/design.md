@@ -39,4 +39,58 @@
             - Images: 0.5MB, 60% = 15TB
             - Text Posts: 100KB, 20% = 1TB
 
+#### Network & Bandwidth Estimation
+- **Ingress**: (216 TB) / (24 × 60 × 60) ≈ **2.5 GB/second**
+- **Egress**: 0.2 × 100 KB + 0.2 × 20 MB + 0.5 × 0.5 MB = **4.32 MB** per user per day
+    - (50 billion × 4.32 MB) / (24 × 60 × 60) ≈ **2.5 TB/second**
+
+#### API Design
+- **Create a text post**
+    - Method: POST
+    - Endpoint: `/v1/posts`
+    - HTTP Body:
+      ```json
+      {
+        "userId": "abc",
+        "description": "Excited for the europe trip",
+        "hashtag": ["travel", "fun"]
+      }
+      ```
+- **Create image/video post**
+    - Image/video will be uploaded on object storage
+    - Method: POST
+    - Endpoint: `/v1/posts`
+    - HTTP Body:
+      ```json
+      {
+        "userId": "abc",
+        "mediaUrl": "s3url", // url from object storage
+        "description": "Relaxing",
+        "hashtags": ["relax", "chilling"]
+      }
+      ```
+- **Like/Comment on a post**
+    - Method: POST
+    - Endpoint: `/v1/comments`
+    - HTTP Body:
+      ```json
+      {
+        "userId": "abc",
+        "postId": "1234",
+        "comment": "Beautiful! Great Shot"
+      }
+      ```
+- **Follow/Unfollow another user**
+    - Method: POST
+    - Endpoint: `/v1/follow`
+    - HTTP Body:
+      ```json
+      {
+        "followerId": "abc",
+        "followingId": "def"
+      }
+      ```
+- **Read the news feed**
+    - Method: GET
+    - Endpoint: `/v1/feeds/{userId}`
 
