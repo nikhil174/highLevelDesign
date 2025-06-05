@@ -94,3 +94,38 @@
     - Method: GET
     - Endpoint: `/v1/feeds/{userId}`
 
+
+#### High Level Design
+
+- **Follow/Unfollow another user**
+  
+  ![High Level Design](in1.png)
+  - Graph DB stores follower and followee relationship efficiently.
+  - Graph DB is specialized in storing relationship between data.
+
+- **Create a text post**
+  - Design is similar to in1.png except DB is not graph DB
+  - Flow: client → API gateway → Load balancer → Postwriter Service → Post DB, API gateway → client
+
+- **Read a news feed**
+  
+  ![News Feed Design](in2.png)
+  - NewsFeedReader Service first finds all the users followed, then gets all the posts, then orders in reverse chronological order.
+
+  **Optimizing**
+  
+  ![Optimized News Feed](in3.png)
+  - Prepare news feed in advance
+  - Once a post arrives in PostWriter Service, it also adds the {postId, userId} in message queue (MQ) after post is added in Post DB
+  - NewsFeedGenerator (NFG) service is responsible for creating newsfeed for all users
+  - NFG service pulls the message from MQ
+  - NFG gets new post from Post DB, finds all the followers from Follow DB, adds the new feed to all the following users in Feed DB
+  - The same info is updated in cache
+
+- **Create an image/video post**
+  
+  ![Image/Video Upload Flow](in4.png)
+  - Client requests a presigned URL to upload the image/video. A presigned URL allows the client to upload content directly to object storage.
+  - API gateway routes the request to the presigned URL generator service, which generates the URL and returns it to the client.
+  - Client uploads the content directly to object storage; object storage returns the URL of the uploaded content to the client.
+  - Client requests for the post feed to the API gateway with the {postId, userId, mediaUrl}. The following steps are similar to the create text post request
