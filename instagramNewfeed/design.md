@@ -253,3 +253,17 @@
     - Secure and temporary access
     - Reduces server load and bandwidth
     - Scalable for large files and high concurrency
+
+- Media Processing
+  - Different devices require different formats and varying network speeds require different resolutions.
+  - To address this, content is stored in multiple formats and resolutions.
+  - When content is uploaded to object storage, a media processing service takes the file, converts it into various formats and resolutions, and stores these processed versions back into object storage.
+  - **Benefits:**
+    - Optimized playback for all device types
+    - Efficient bandwidth usage
+    - Improved user experience with adaptive streaming
+    - Scalability for large-scale media delivery
+
+---
+
+*This concludes the high-level design and deep-dive documentation for the Instagram Newsfeed system. For further enhancements, refer to the other documentation files in this repository or add new sections as needed.*
