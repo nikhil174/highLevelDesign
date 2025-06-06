@@ -243,3 +243,13 @@
     }
     ```
     - **Common query:** Getting the list of follower and following users for the user. Index on `userId`.
+
+- Pre-signed URL
+  - A special URL that allows users to upload directly to object storage (e.g., S3) without passing through the backend server.
+  - Has temporary permissions to upload the content to object storage.
+  - Contains a signature that authorizes the client to upload for a limited amount of time.
+  - **Benefits:**
+    - Faster uploads (bypasses backend server)
+    - Secure and temporary access
+    - Reduces server load and bandwidth
+    - Scalable for large files and high concurrency
