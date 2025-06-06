@@ -266,4 +266,4 @@
 
 ---
 
-*This concludes the high-level design and deep-dive documentation for the Instagram Newsfeed system. For further enhancements, refer to the other documentation files in this repository or add new sections as needed.*
+*This concludes the high-level design and for the Instagram Newsfeed system.*
