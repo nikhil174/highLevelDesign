@@ -176,3 +176,70 @@
   | Follow DB   | Graph/Relational | High (many-to-many)  | By userId (traverse graph) | Graph DB      |
 
   > **Tip:** Use NoSQL for flexible, high-scale, simple-access data. Use Graph DB for complex, highly-connected relationships.
+
+- Data Modeling
+  - **Posts DB**:
+    ```json
+    {
+      "postId": "1213",
+      "userId": "abc",
+      "text": "post text",
+      "mediaUrl": ["url1", "url2"],
+      "timestamp": "17234532"
+    }
+    ```
+    - **Common query:** Reading post by `postId`. Index on `postId` for fast lookup.
+
+  - **Feeds DB**:
+    ```json
+    {
+      "userId": "asdc",
+      "feedItems": [
+        // posts
+      ]
+    }
+    ```
+    - **Common query:** Reading feed by `userId`. Index on `userId`.
+
+  - **Comments DB**:
+    ```json
+    {
+      "commentId": "unique_comment_id",
+      "userId": "acg",
+      "postId": "sdfe",
+      "comment": "comment text",
+      "timestamp": "183143124"
+    }
+    ```
+    - **Common query:** Getting all comments for a post. Index on `postId`.
+
+  - **Likes DB**:
+    ```json
+    {
+      "likeId": "unique_like_id",
+      "userId": "acg",
+      "postId": "sdfe",
+      "timestamp": "183143124"
+    }
+    ```
+    - **Common query:** Getting the likes count for the post and all the users that liked the post. Index on `postId`.
+
+  - **Follow DB**:
+    ```json
+    {
+      "userId": "usda",
+      "followers": [
+        {
+          "followerId": "adffe",
+          "timestamp": "1723423354"
+        }
+      ],
+      "following": [
+        {
+          "followerId": "adffdfase",
+          "timestamp": "1723422334"
+        }
+      ]
+    }
+    ```
+    - **Common query:** Getting the list of follower and following users for the user. Index on `userId`.
